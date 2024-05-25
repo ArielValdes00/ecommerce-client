@@ -21,7 +21,7 @@ export default function RootLayout({
             <body className={inter.className}>
                 <NextUIProvider>
                     <Header />
-                    <main className="px-5 max-w-[1234px] mx-auto">
+                    <main className="px-5 xl:px-0 max-w-[1234px] mx-auto">
                         {children}
                     </main>
                 </NextUIProvider>

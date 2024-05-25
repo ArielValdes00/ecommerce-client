@@ -26,7 +26,7 @@ const ProductCategorySelect: React.FC = () => {
     const handleSelect = (category: string) => {
         router.push(`/products/${category}`);
     };
-    console.log(productCategory)
+
     return (
         <Select
             items={categories}
@@ -34,7 +34,7 @@ const ProductCategorySelect: React.FC = () => {
             placeholder="Select a Category"
             className="max-w-xs"
             onChange={(e) => handleSelect(e.target.value)}
-            selectedKeys={new Set([productCategory || ""])}
+            selectedKeys={productCategory ? [productCategory] : []}
         >
             {categories?.map((category: string) => <SelectItem key={category}>{category}</SelectItem>)}
         </Select>

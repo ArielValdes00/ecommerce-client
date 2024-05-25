@@ -47,7 +47,7 @@ console.log(product)
                     </Breadcrumbs>
                     <div key={product?.id} className='grid md:grid-cols-2 gap-5 py-10'>
                         <Image src={product?.image} alt={product?.title} width={900} height={900} />
-                        <div className='flex flex-col items-start gap-3 mt-10'>
+                        <div className='flex flex-col items-start gap-3 mt-6'>
                             <p className='font-bold text-3xl'>{product?.title}</p>
                             {product?.popular && <p className='text-sm text-blue-500 bg-blue-100 px-2 py-1 rounded-full'>Popular</p>}
                             <div className='flex flex-col'>

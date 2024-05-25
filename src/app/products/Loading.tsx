@@ -2,7 +2,7 @@ import { Skeleton } from "@nextui-org/react"
 
 const Loading = () => {
     return (
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-3 gap-4 mt-10'>
             {Array(6).fill(0).map((_, index) => (
                 <Skeleton key={index} className='flex flex-col gap-3 items-center justify-between p-3 rounded-lg'>
                     <div className="h-64 w-full bg-default-300 rounded"></div>
