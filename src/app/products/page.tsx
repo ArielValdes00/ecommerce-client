@@ -4,6 +4,7 @@ import { Button, Card, Image, Pagination } from '@nextui-org/react'
 import Link from 'next/link'
 import Loading from './Loading'
 import FilterProducts from '../components/FilterProducts'
+import { useCart } from '../context/CartContext'
 
 const Products = () => {
     const [products, setProducts] = useState<any>(null);
@@ -14,6 +15,7 @@ const Products = () => {
     const [highestPrice, setHighestPrice] = useState<number>(0);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, highestPrice]);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const { dispatch } = useCart();
 
     const getData = async () => {
         setLoading(true);
@@ -58,6 +60,10 @@ const Products = () => {
         getData();
     };
 
+    const handleAddToCart = (product: any) => {
+        dispatch({ type: 'ADD_ITEM', payload: product });
+    };
+
     const filteredProducts = products?.filter((product: any) => {
         const isWithinPriceRange = product.price >= priceRange[0] && product.price <= priceRange[1];
         const matchesColor = !colorFilter || product.color === colorFilter;
@@ -84,9 +90,9 @@ const Products = () => {
                                 <Link href={`/products/${product.category}/${product.id.toString()}`}>
                                     <Image src={product.image} alt={product.title} width={200} />
                                 </Link>
-                                <Link href={`products/${product.id.toString()}`} className='text-center hover:underline'>{product.title.length > 100 ? product.title.substring(0, 100) + '...' : product.title}</Link>
+                                <Link href={`products/${product.category}/${product.id.toString()}`} className='text-center hover:underline'>{product.title.length > 100 ? product.title.substring(0, 100) + '...' : product.title}</Link>
                                 <p className='font-bold'>${product.price.toFixed(2)}</p>
-                                <Button color="primary" size='lg'>
+                                <Button color="primary" size='lg' onClick={() => handleAddToCart(product)}>
                                     Añadir al Carrito
                                 </Button>
                             </Card>

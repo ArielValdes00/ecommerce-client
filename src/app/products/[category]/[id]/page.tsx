@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Loading from './Loading';
 import { capitalizeFirstLetter } from '@/app/utils/functions';
+import { useCart } from '@/app/context/CartContext';
 
 const ProductId = () => {
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [showFullDescription, setShowFullDescription] = useState<boolean>(false);
+    const { dispatch } = useCart();
 
     const pathname = usePathname();
     const splitPathname = pathname.split('/');
@@ -33,14 +35,17 @@ const ProductId = () => {
         getData();
     }, []);
 
+    const handleAddToCart = (product: any) => {
+        dispatch({ type: 'ADD_ITEM', payload: product });
+    };
+
     const discountedPrice = product?.price - (product?.price * (product?.discount / 100))
-console.log(product)
     return (
         <main>
             {loading && <Loading />}
             {!loading && (
                 <section>
-                    <Breadcrumbs>
+                    <Breadcrumbs size='lg'>
                         <BreadcrumbItem href='/products'>Products</BreadcrumbItem>
                         <BreadcrumbItem href={`/products/${category}`}>{capitalizeFirstLetter(category)}</BreadcrumbItem>
                         <BreadcrumbItem>{product?.model}</BreadcrumbItem>
@@ -77,7 +82,9 @@ console.log(product)
                                 </button>
                             </div>
                             <div className='flex items-center gap-2 w-full mt-1'>
-                                <Button color='primary' size='lg' fullWidth={true}>Añadir al Carrito</Button>
+                                <Button color="primary" size='lg' fullWidth={true} onClick={() => handleAddToCart(product)}>
+                                    Añadir al Carrito
+                                </Button>
                                 <Button isIconOnly aria-label="Like" size='lg' className='bg-gray-200'>
                                     <HeartIcon />
                                 </Button>

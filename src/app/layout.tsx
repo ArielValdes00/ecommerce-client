@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { NextUIProvider } from "@nextui-org/react";
 import Header from "./partials/Navbar";
+import { CartProvider } from "./context/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +20,14 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                <NextUIProvider>
-                    <Header />
-                    <main className="px-5 xl:px-0 max-w-[1234px] mx-auto">
-                        {children}
-                    </main>
-                </NextUIProvider>
+                <CartProvider>
+                    <NextUIProvider>
+                        <Header />
+                        <main className="px-5 xl:px-0 max-w-[1234px] mx-auto">
+                            {children}
+                        </main>
+                    </NextUIProvider>
+                </CartProvider>
             </body>
         </html>
     );

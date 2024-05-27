@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import Loading from './Loading';
+import { useCart } from '@/app/context/CartContext';
 
 const Category = () => {
     const [products, setProducts] = useState<any>(null);
@@ -15,6 +16,7 @@ const Category = () => {
     const [productColors, setProductColors] = useState<any[]>([]);
     const [highestPrice, setHighestPrice] = useState<number>(0);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, highestPrice]);
+    const { dispatch } = useCart();
 
     const pathname = usePathname();
     const splitPathname = pathname.split('/');
@@ -65,6 +67,10 @@ const Category = () => {
         return isWithinPriceRange && matchesColor && isPopular;
     });
 
+    const handleAddToCart = (product: any) => {
+        dispatch({ type: 'ADD_ITEM', payload: product });
+    };
+
     return (
         <section className='py-10'>
             {loading && <Loading />}
@@ -86,7 +92,7 @@ const Category = () => {
                                 </Link>
                                 <Link href={`products/${product.id.toString()}`} className='text-center hover:underline'>{product.title.length > 100 ? product.title.substring(0, 100) + '...' : product.title}</Link>
                                 <p className='font-bold'>${product.price.toFixed(2)}</p>
-                                <Button color="primary" size='lg'>
+                                <Button color="primary" size='lg' onClick={() => handleAddToCart(product)}>
                                     Añadir al Carrito
                                 </Button>
                             </Card>
