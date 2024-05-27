@@ -49,7 +49,7 @@ const CartPage = () => {
                             <Image src={"/emptycart.png"} alt='empty cart' width={400} height={400} />
                             <p className='text-3xl font-semibold'>Your shopping cart is empty.</p>
                             <Button onClick={handleOnClick} size='lg' color="primary" className='mt-10'>
-                                Let's go Shopping!
+                                Let&apos;s go Shopping!
                             </Button>
                         </div>
                     ) : (

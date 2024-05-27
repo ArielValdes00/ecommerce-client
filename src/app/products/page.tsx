@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Card, Image, Pagination } from '@nextui-org/react'
 import Link from 'next/link'
 import Loading from './Loading'
@@ -17,7 +17,7 @@ const Products = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const { dispatch } = useCart();
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         setLoading(true);
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTS_URL}/products?page=${currentPage}&limit=12`);
@@ -35,11 +35,11 @@ const Products = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentPage]);
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [getData]);
 
     const handleColorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setColorFilter(event.target.value);

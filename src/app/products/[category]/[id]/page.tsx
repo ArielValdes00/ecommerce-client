@@ -18,22 +18,22 @@ const ProductId = () => {
     const productId = Number(splitPathname[3]);
     const category = splitPathname[2];
 
-    const getData = async () => {
-        setLoading(true);
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTS_URL}/products/${productId}`);
-            const data = await res.json();
-            setProduct(data.product);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
+        const getData = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTS_URL}/products/${productId}`);
+                const data = await res.json();
+                setProduct(data.product);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
         getData();
-    }, []);
+    }, [productId]);
 
     const handleAddToCart = (product: any) => {
         dispatch({ type: 'ADD_ITEM', payload: product });

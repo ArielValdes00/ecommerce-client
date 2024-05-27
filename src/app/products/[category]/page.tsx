@@ -4,7 +4,7 @@ import { Button, Card, Pagination, Select, SelectItem } from '@nextui-org/react'
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Loading from './Loading';
 import { useCart } from '@/app/context/CartContext';
 
@@ -22,7 +22,7 @@ const Category = () => {
     const splitPathname = pathname.split('/');
     const productCategory = splitPathname[2];
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         setLoading(true);
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_PRODUCTS_URL}/products/category?type=${productCategory}`);
@@ -40,11 +40,11 @@ const Category = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [productCategory]);
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [getData]);
 
     const handleColorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setColorFilter(event.target.value);
