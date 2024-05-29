@@ -4,7 +4,7 @@ import { Button, Card, Pagination, Select, SelectItem } from '@nextui-org/react'
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Loading from './Loading';
 import { useCart } from '@/app/context/CartContext';
 
@@ -16,7 +16,8 @@ const Category = () => {
     const [productColors, setProductColors] = useState<any[]>([]);
     const [highestPrice, setHighestPrice] = useState<number>(0);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, highestPrice]);
-    const { dispatch } = useCart();
+    const { dispatch, setPopupState } = useCart();
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const pathname = usePathname();
     const splitPathname = pathname.split('/');
@@ -69,6 +70,15 @@ const Category = () => {
 
     const handleAddToCart = (product: any) => {
         dispatch({ type: 'ADD_ITEM', payload: product });
+        setPopupState({ visible: true, product });
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        timeoutRef.current = setTimeout(() => {
+            setPopupState({ visible: false, product: null });
+        }, 3000);
     };
 
     return (

@@ -8,7 +8,7 @@ const INITIALIZE = 'INITIALIZE';
 
 interface Item {
     id: string;
-    name: string;
+    title: string;
     price: number;
     image: string;
     category: string;
@@ -28,14 +28,26 @@ interface CartAction {
     payload?: Item | CartState;
 }
 
+interface PopupState {
+    visible: boolean;
+    product: Item | null;
+}
+
 interface CartContextProps {
     state: CartState;
     dispatch: Dispatch<CartAction>;
+    popupState: PopupState;
+    setPopupState: (popupState: PopupState) => void;
 }
 
 const initialState: CartState = {
     items: [],
     totalAmount: 0,
+};
+
+const initialPopupState: PopupState = {
+    visible: false,
+    product: null,
 };
 
 function cartReducer(state: CartState, action: CartAction): CartState {
@@ -105,11 +117,14 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 const CartContext = createContext<CartContextProps>({
     state: initialState,
     dispatch: () => null,
+    popupState: initialPopupState,
+    setPopupState: () => null,
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(cartReducer, initialState);
     const [isInitialized, setIsInitialized] = useState(false);
+    const [popupState, setPopupState] = useState<PopupState>(initialPopupState);
 
     useEffect(() => {
         if (!isInitialized) {
@@ -129,7 +144,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }, [state, isInitialized]);
 
     return (
-        <CartContext.Provider value={{ state, dispatch }}>
+        <CartContext.Provider value={{ state, dispatch, popupState, setPopupState }}>
             {children}
         </CartContext.Provider>
     );

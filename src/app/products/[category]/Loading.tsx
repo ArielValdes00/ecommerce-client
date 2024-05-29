@@ -1,18 +1,18 @@
-import { Skeleton } from "@nextui-org/react"
+import { Skeleton } from "@nextui-org/react";
 
 const Loading = () => {
     return (
-        <div className='grid grid-cols-3 gap-4 mt-10'>
+        <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10'>
             {Array(6).fill(0).map((_, index) => (
-                <Skeleton key={index} className='flex flex-col gap-3 items-center justify-between p-3 rounded-lg'>
-                    <div className="h-64 w-full bg-default-300 rounded"></div>
-                    <div className="h-6 w-3/4 bg-default-300 rounded"></div>
-                    <div className="h-6 w-1/2 bg-default-300 rounded"></div>
-                    <div className="h-10 w-full bg-default-300 rounded"></div>
-                </Skeleton>
+                <div key={index} className='flex flex-col gap-3 items-start justify-between p-3 rounded-lg'>
+                    <Skeleton className="w-full h-64 bg-default-200 rounded-xl" />
+                    <Skeleton className="w-3/5 h-4 bg-default-200 rounded-full" />
+                    <Skeleton className="w-4/5 h-4 bg-default-200 rounded-full" />
+                    <Skeleton className="w-2/5 h-4 bg-default-200 rounded-full" />
+                </div>
             ))}
         </div>
-    )
+    );
 }
 
-export default Loading
+export default Loading;

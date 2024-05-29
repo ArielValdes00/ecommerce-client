@@ -1,10 +1,10 @@
-"use client"
-import React, { useCallback, useEffect, useState } from 'react'
-import { Button, Card, Image, Pagination } from '@nextui-org/react'
-import Link from 'next/link'
-import Loading from './Loading'
-import FilterProducts from '../components/FilterProducts'
-import { useCart } from '../context/CartContext'
+"use client";
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { Button, Card, Image, Pagination } from '@nextui-org/react';
+import Link from 'next/link';
+import Loading from './Loading';
+import FilterProducts from '../components/FilterProducts';
+import { useCart } from '../context/CartContext';
 
 const Products = () => {
     const [products, setProducts] = useState<any>(null);
@@ -15,7 +15,8 @@ const Products = () => {
     const [highestPrice, setHighestPrice] = useState<number>(0);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, highestPrice]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const { dispatch } = useCart();
+    const { dispatch, setPopupState } = useCart();
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const getData = useCallback(async () => {
         setLoading(true);
@@ -62,6 +63,15 @@ const Products = () => {
 
     const handleAddToCart = (product: any) => {
         dispatch({ type: 'ADD_ITEM', payload: product });
+        setPopupState({ visible: true, product });
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        timeoutRef.current = setTimeout(() => {
+            setPopupState({ visible: false, product: null });
+        }, 3000);
     };
 
     const filteredProducts = products?.filter((product: any) => {

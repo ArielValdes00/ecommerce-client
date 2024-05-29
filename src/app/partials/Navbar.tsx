@@ -4,6 +4,7 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, Navba
 import { CartIcon } from "../icons/CartIcon";
 import { useCart } from "../context/CartContext";
 import { useRouter } from "next/navigation";
+import AddToCartPopup from "../components/AddToCartPopup";
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -64,7 +65,7 @@ export default function Header() {
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
-                <NavbarItem className="cursor-pointer" onClick={handleOnClick}>
+                <NavbarItem className="cursor-pointer relative" onClick={handleOnClick}>
                     <Badge color="danger" content={state.items.length} isInvisible={isInvisible} shape="circle">
                         <CartIcon />
                     </Badge>
@@ -86,6 +87,7 @@ export default function Header() {
                     </NavbarMenuItem>
                 ))}
             </NavbarMenu>
+            <AddToCartPopup/>
         </Navbar>
     );
 }

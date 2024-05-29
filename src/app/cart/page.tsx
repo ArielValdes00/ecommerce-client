@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { BreadcrumbItem, Breadcrumbs, Button } from '@nextui-org/react';
+import React, { useEffect, useState, useRef } from 'react';
+import { BreadcrumbItem, Breadcrumbs, Button, useDisclosure } from '@nextui-org/react';
 import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import Loading from './Loading';
@@ -8,11 +8,14 @@ import { DeleteIcon } from '../icons/DeleteIcon';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ShippingInformation from '../components/cart/ShippingInformation';
+import ModalDeleteProduct from '../components/cart/ModalDeleteProduct';
 
 const CartPage = () => {
     const { state, dispatch } = useCart();
     const [loading, setLoading] = useState<boolean>(true);
+    const [selectedProduct, setSelectedProduct] = useState<any>(null);
     const router = useRouter();
+    const { isOpen, onOpenChange, onOpen } = useDisclosure();
 
     const handleOnClick = () => {
         router.push('/products');
@@ -33,8 +36,19 @@ const CartPage = () => {
         setLoading(false);
     }, []);
 
+    const openDeleteModal = (product: any) => {
+        setSelectedProduct(product);
+        onOpen();
+    };
+
     return (
         <div className={`${loading ? 'h-[600px] grid place-center mt-20' : 'h-full'}`}>
+            <ModalDeleteProduct
+                handleRemoveFromCart={handleRemoveFromCart}
+                product={selectedProduct}
+                onOpenChange={onOpenChange}
+                isOpen={isOpen}
+            />
             {loading && <Loading />}
             {!loading && (
                 <div className="py-10">
@@ -72,7 +86,7 @@ const CartPage = () => {
                                                     <span className='ms-2 text-gray-500'>x {product.quantity === null ? "1" : product.quantity}</span>
                                                 </p>
                                             </div>
-                                            <Button isIconOnly radius='full' size='lg' className='self-center ml-auto' onClick={() => handleRemoveFromCart(product)}>
+                                            <Button isIconOnly radius='full' size='lg' className='self-center ml-auto' onClick={() => openDeleteModal(product)}>
                                                 <DeleteIcon />
                                             </Button>
                                         </div>
