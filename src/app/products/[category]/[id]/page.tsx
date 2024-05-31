@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Loading from './Loading';
 import { capitalizeFirstLetter } from '@/app/utils/functions';
 import { useCart } from '@/app/context/CartContext';
+import MaxWidth from '@/app/partials/MaxWidth';
 
 const ProductId = () => {
     const [product, setProduct] = useState<any>(null);
@@ -41,7 +42,7 @@ const ProductId = () => {
 
     const discountedPrice = product?.price - (product?.price * (product?.discount / 100))
     return (
-        <main>
+        <MaxWidth>
             {loading && <Loading />}
             {!loading && (
                 <section>
@@ -93,7 +94,7 @@ const ProductId = () => {
                     </div>
                 </section>
             )}
-        </main>
+        </MaxWidth>
     );
 };
 

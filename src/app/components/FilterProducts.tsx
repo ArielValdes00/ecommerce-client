@@ -15,7 +15,7 @@ interface FilterProductsProps {
 
 const FilterProducts: React.FC<FilterProductsProps> = ({ handlePopularChange, highestPrice, handlePriceRangeChange, productColors, handleColorChange, colorFilter }) => {
     return (
-        <div className='py-3 grid grid-cols-2 lg:flex items-center justify-between gap-5'>
+        <div className='py-3 pb-6 grid grid-cols-2 lg:flex items-center justify-between gap-5'>
             <ProductCategorySelect />
             <ProductColorSelect
                 handleColorChange={handleColorChange}

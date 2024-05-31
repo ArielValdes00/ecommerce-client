@@ -1,12 +1,14 @@
 "use client"
 import FilterProducts from '@/app/components/FilterProducts';
-import { Button, Card, Pagination, Select, SelectItem } from '@nextui-org/react';
+import { BreadcrumbItem, Breadcrumbs, Button, Card, Pagination, Select, SelectItem } from '@nextui-org/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Loading from './Loading';
 import { useCart } from '@/app/context/CartContext';
+import MaxWidth from '@/app/partials/MaxWidth';
+import { capitalizeFirstLetter } from '@/app/utils/functions';
 
 const Category = () => {
     const [products, setProducts] = useState<any>(null);
@@ -82,10 +84,15 @@ const Category = () => {
     };
 
     return (
-        <section className='py-10'>
+        <MaxWidth>
             {loading && <Loading />}
             {!loading && (
                 <div>
+                    <Breadcrumbs size='lg' className='mb-3'>
+                        <BreadcrumbItem href='/'>Home</BreadcrumbItem>
+                        <BreadcrumbItem href={'/products'}>Products</BreadcrumbItem>
+                        <BreadcrumbItem>{capitalizeFirstLetter(productCategory)}</BreadcrumbItem>
+                    </Breadcrumbs>
                     <FilterProducts
                         highestPrice={highestPrice}
                         handlePriceRangeChange={handlePriceRangeChange}
@@ -110,7 +117,7 @@ const Category = () => {
                     </div>
                 </div>
             )}
-        </section>
+        </MaxWidth>
     )
 }
 

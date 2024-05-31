@@ -1,20 +1,15 @@
 import React from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
 
 interface ModalDeleteProductProps {
-    handleRemoveFromCart: (product: any) => void;
-    product: any;
+    handleRemoveFromCart: () => void;
     isOpen: boolean;
-    onOpenChange: () => void
+    onOpenChange: () => void;
+    headerText: string;
+    bodyText: string;
 }
 
-const ModalDeleteProduct: React.FC<ModalDeleteProductProps> = ({ handleRemoveFromCart, product, isOpen, onOpenChange }) => {
-
-    const deleteProduct = () => {
-        handleRemoveFromCart(product);
-        onOpenChange();
-    };
-
+const ModalDeleteProduct: React.FC<ModalDeleteProductProps> = ({ handleRemoveFromCart, isOpen, onOpenChange, headerText, bodyText }) => {
     return (
         <>
             <Modal isOpen={isOpen} size='lg' onOpenChange={onOpenChange}>
@@ -22,18 +17,18 @@ const ModalDeleteProduct: React.FC<ModalDeleteProductProps> = ({ handleRemoveFro
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col items-center">
-                                <span className="text-red-600 font-bold text-xl">Delete Product</span>
+                                <span className="text-red-600 font-bold text-xl">{headerText}</span>
                             </ModalHeader>
                             <ModalBody>
                                 <p className="text-center text-gray-700">
-                                    Are you sure you want to delete this product?
+                                    {bodyText}
                                 </p>
                             </ModalBody>
                             <ModalFooter className="flex justify-center">
-                                <Button onPress={deleteProduct} className="bg-red-600 text-white">
+                                <Button onPress={() => { handleRemoveFromCart(); onClose(); }} color='danger' className="text-white">
                                     Delete
                                 </Button>
-                                <Button variant="light" onPress={onClose} className="mr-2 text-red-600">
+                                <Button variant="light" onPress={onClose} color='danger' className="mr-2">
                                     Cancel
                                 </Button>
                             </ModalFooter>
@@ -43,6 +38,6 @@ const ModalDeleteProduct: React.FC<ModalDeleteProductProps> = ({ handleRemoveFro
             </Modal>
         </>
     );
-}
+};
 
 export default ModalDeleteProduct;

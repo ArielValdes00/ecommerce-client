@@ -1,10 +1,11 @@
 "use client";
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Button, Card, Image, Pagination } from '@nextui-org/react';
+import { BreadcrumbItem, Breadcrumbs, Button, Card, Image, Pagination } from '@nextui-org/react';
 import Link from 'next/link';
 import Loading from './Loading';
 import FilterProducts from '../components/FilterProducts';
 import { useCart } from '../context/CartContext';
+import MaxWidth from '../partials/MaxWidth';
 
 const Products = () => {
     const [products, setProducts] = useState<any>(null);
@@ -82,10 +83,14 @@ const Products = () => {
     });
 
     return (
-        <section className='py-10'>
+        <MaxWidth>
             {loading && <Loading />}
             {!loading && (
                 <div>
+                    <Breadcrumbs size='lg' className='mb-3'>
+                        <BreadcrumbItem href='/'>Home</BreadcrumbItem>
+                        <BreadcrumbItem>Products</BreadcrumbItem>
+                    </Breadcrumbs>
                     <FilterProducts
                         highestPrice={highestPrice}
                         handlePriceRangeChange={handlePriceRangeChange}
@@ -113,7 +118,7 @@ const Products = () => {
                     </div>
                 </div>
             )}
-        </section>
+        </MaxWidth>
     )
 }
 
