@@ -1,16 +1,16 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { BreadcrumbItem, Breadcrumbs, Button, RadioGroup, useDisclosure } from '@nextui-org/react';
-import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 import Loading from './Loading';
-import { DeleteIcon } from '../icons/DeleteIcon';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ShippingInformation from '../components/cart/ShippingInformation';
 import ModalDeleteProduct from '../components/cart/ModalDeleteProduct';
 import MaxWidth from '../partials/MaxWidth';
 import { CustomRadio } from '../components/cart/CustomRadio';
+import OrderInformation from '../components/cart/OrderInformation';
+import PayPalButton from '../components/cart/PayPalButton';
 
 const CartPage = () => {
     const { state, dispatch } = useCart();
@@ -18,7 +18,7 @@ const CartPage = () => {
     const [modalContent, setModalContent] = useState<{ header: string, body: string, action: () => void }>({
         header: '',
         body: '',
-        action: () => {}
+        action: () => { }
     });
     const router = useRouter();
     const { isOpen, onOpenChange, onOpen } = useDisclosure();
@@ -72,7 +72,7 @@ const CartPage = () => {
                 />
                 {loading && <Loading />}
                 {!loading && (
-                    <div className="py-10">
+                    <div className="py-2">
                         <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
                         <Breadcrumbs size='lg'>
                             <BreadcrumbItem href='/'>Home</BreadcrumbItem>
@@ -81,15 +81,15 @@ const CartPage = () => {
                         </Breadcrumbs>
                         {state.items.length === 0 ? (
                             <div className='flex flex-col items-center justify-center mt-6 h-[550px]'>
-                                <Image src={"/emptycart.png"} alt='empty cart' width={400} height={400} />
-                                <p className='text-3xl font-semibold'>Your shopping cart is empty.</p>
+                                <Image src={"/emptycart.png"} loading='eager' alt='empty cart' width={400} height={400} />
+                                <p className='text-3xl text-center font-semibold'>Your shopping cart is empty.</p>
                                 <Button onClick={handleOnClick} size='lg' color="primary" className='mt-10'>
                                     Let&apos;s go Shopping!
                                 </Button>
                             </div>
                         ) : (
-                            <div className='grid lg:grid-cols-5 gap-5 mt-6'>
-                                <div className='col-span-3'>
+                            <div className='grid lg:grid-cols-6 mt-6'>
+                                <div className='col-span-4'>
                                     <p className='text-start py-4 text-xl font-semibold text-gray-500'>Shipping Information</p>
                                     <ShippingInformation />
                                     <p className='text-start py-4 text-xl font-semibold text-gray-500'>Payment Method</p>
@@ -118,33 +118,11 @@ const CartPage = () => {
                                     </RadioGroup>
                                 </div>
                                 <div className='col-span-2'>
-                                    <div className='flex justify-between items-center py-4 border-b'>
-                                        <p className='text-start text-xl font-semibold text-gray-500 mb-1'>Your Order</p>
-                                        <p onClick={openClearCartModal} className='text-red-600 hover:underline text-sm cursor-pointer'>
-                                            Clear Cart
-                                        </p>
-                                    </div>
-                                    {state.items.map((product: any) => (
-                                        <div key={product.id} className='flex flex-col border-b gap-4 items-center justify-between py-4'>
-                                            <div className='grid grid-cols-4 gap-2'>
-                                                <Link href={`/products/${product.category}/${product.id.toString()}`}>
-                                                    <Image src={product.image} alt={product.title} width={800} height={800} />
-                                                </Link>
-                                                <div className='flex flex-col col-span-2 justify-center gap-1'>
-                                                    <Link href={`products/${product.id.toString()}`} className='text-start hover:underline'>{product.title.length > 100 ? product.title.substring(0, 100) + '...' : product.title}</Link>
-                                                    <p className='font-bold'>${product.price.toFixed(2)}
-                                                        <span className='ms-2 text-gray-500'>x {product.quantity === null ? "1" : product.quantity}</span>
-                                                    </p>
-                                                </div>
-                                                <Button isIconOnly radius='full' variant='ghost' color='danger' size='lg' className='self-center ml-auto' onClick={() => openDeleteModal(product)}>
-                                                    <DeleteIcon />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                    <div className='mt-10'>
-                                        <p className='font-bold text-xl'>Total: ${state.totalAmount.toFixed(2)}</p>
-                                    </div>
+                                    <OrderInformation
+                                        openClearCartModal={openClearCartModal}
+                                        openDeleteModal={openDeleteModal}
+                                    />
+                                    <PayPalButton total={state.totalAmount} />
                                 </div>
                             </div>
                         )}

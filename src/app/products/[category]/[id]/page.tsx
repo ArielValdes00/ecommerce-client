@@ -2,7 +2,7 @@
 import { HeartIcon } from '@/app/icons/HeartIcon';
 import { BreadcrumbItem, Breadcrumbs, Button, Image } from '@nextui-org/react';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Loading from './Loading';
 import { capitalizeFirstLetter } from '@/app/utils/functions';
 import { useCart } from '@/app/context/CartContext';
@@ -12,12 +12,12 @@ const ProductId = () => {
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [showFullDescription, setShowFullDescription] = useState<boolean>(false);
-    const { dispatch } = useCart();
-
+    const { dispatch, setPopupState } = useCart();
     const pathname = usePathname();
     const splitPathname = pathname.split('/');
     const productId = Number(splitPathname[3]);
     const category = splitPathname[2];
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -32,12 +32,21 @@ const ProductId = () => {
                 setLoading(false);
             }
         };
-        
+
         getData();
     }, [productId]);
 
     const handleAddToCart = (product: any) => {
         dispatch({ type: 'ADD_ITEM', payload: product });
+        setPopupState({ visible: true, product });
+
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        timeoutRef.current = setTimeout(() => {
+            setPopupState({ visible: false, product: null });
+        }, 3000);
     };
 
     const discountedPrice = product?.price - (product?.price * (product?.discount / 100))
@@ -46,7 +55,8 @@ const ProductId = () => {
             {loading && <Loading />}
             {!loading && (
                 <section>
-                    <Breadcrumbs size='lg'>
+                    <Breadcrumbs size={'lg'}>
+                        <BreadcrumbItem href='/'>Home</BreadcrumbItem>
                         <BreadcrumbItem href='/products'>Products</BreadcrumbItem>
                         <BreadcrumbItem href={`/products/${category}`}>{capitalizeFirstLetter(category)}</BreadcrumbItem>
                         <BreadcrumbItem>{product?.model}</BreadcrumbItem>

@@ -8,7 +8,7 @@ const AddToCartPopup: React.FC = () => {
     if (!popupState.visible || !popupState.product) return null;
 
     return (
-        <div className="absolute top-10 w-[500px] right-5 p-4 bg-white shadow-lg rounded-lg z-50">
+        <div className="absolute top-10 w-[350px] sm:w-[400px] md:w-[500px] right-5 p-4 bg-white shadow-lg rounded-lg z-50">
             <div className="grid grid-cols-4 items-center gap-1 relative">
                 <Image src={popupState.product.image} alt={popupState.product.title} width={100}/>
                 <div className='col-span-3 text-sm pe-3'>

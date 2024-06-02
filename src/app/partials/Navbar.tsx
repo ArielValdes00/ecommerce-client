@@ -69,8 +69,8 @@ export default function Header() {
                     <NavbarMenuItem key={`${item}-${index}`}>
                         <Link
                             color={"foreground"}
-                            className="w-full"
-                            href="#"
+                            className="w-full my-4 text-2xl"
+                            href={item === "Home" ? "/" : item.toLowerCase()}
                             size="lg"
                         >
                             {item}
