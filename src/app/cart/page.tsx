@@ -11,17 +11,24 @@ import MaxWidth from '../partials/MaxWidth';
 import { CustomRadio } from '../components/cart/CustomRadio';
 import OrderInformation from '../components/cart/OrderInformation';
 import PayPalButton from '../components/cart/PayPalButton';
+import ModalPurchaseCompleted from '../components/cart/ModalPurchaseCompleted';
 
 const CartPage = () => {
     const { state, dispatch } = useCart();
     const [loading, setLoading] = useState<boolean>(true);
+    const [openModalPurchaseCompleted, setOpenModalPurchaseCompleted] = useState<boolean>(false);
+    const [payPalButtonDisable, setPayPalButtonDisable] = useState<boolean>(true);
     const [modalContent, setModalContent] = useState<{ header: string, body: string, action: () => void }>({
         header: '',
         body: '',
         action: () => { }
     });
     const router = useRouter();
-    const { isOpen, onOpenChange, onOpen } = useDisclosure();
+    const modalDeleteProduct = useDisclosure();
+
+    const shippingCost = 10.00;
+    const taxAmount = state.totalAmount * 0.1
+    const [discount, setDiscount] = useState(0.00);
 
     const handleOnClick = () => {
         router.push('/products');
@@ -48,7 +55,7 @@ const CartPage = () => {
             body: 'Are you sure you want to delete this product?',
             action: () => handleRemoveFromCart(product)
         });
-        onOpen();
+        modalDeleteProduct.onOpen();
     };
 
     const openClearCartModal = () => {
@@ -57,18 +64,22 @@ const CartPage = () => {
             body: 'Are you sure you want to clear all items from the cart?',
             action: handleClearCart
         });
-        onOpen();
+        modalDeleteProduct.onOpen();
     };
 
     return (
         <MaxWidth>
             <div className={`${loading ? 'h-[600px] grid place-center mt-20' : 'h-full'}`}>
+                <ModalPurchaseCompleted
+                onOpenChange={setOpenModalPurchaseCompleted}
+                isOpen={openModalPurchaseCompleted}
+                />
                 <ModalDeleteProduct
                     handleRemoveFromCart={modalContent.action}
                     headerText={modalContent.header}
                     bodyText={modalContent.body}
-                    onOpenChange={onOpenChange}
-                    isOpen={isOpen}
+                    onOpenChange={modalDeleteProduct.onOpenChange}
+                    isOpen={modalDeleteProduct.isOpen}
                 />
                 {loading && <Loading />}
                 {!loading && (
@@ -91,9 +102,9 @@ const CartPage = () => {
                             <div className='grid lg:grid-cols-6 mt-6'>
                                 <div className='col-span-4'>
                                     <p className='text-start py-4 text-xl font-semibold text-gray-500'>Shipping Information</p>
-                                    <ShippingInformation />
+                                    <ShippingInformation setPayPalButtonDisable={setPayPalButtonDisable}/>
                                     <p className='text-start py-4 text-xl font-semibold text-gray-500'>Payment Method</p>
-                                    <RadioGroup label="" orientation='horizontal' className='py-4' >
+                                    <RadioGroup defaultValue={"PayPal"} label="" orientation='horizontal' className='py-4' >
                                         <CustomRadio
                                             isDisabled={false}
                                             description="Pay with PayPal"
@@ -119,10 +130,20 @@ const CartPage = () => {
                                 </div>
                                 <div className='col-span-2'>
                                     <OrderInformation
+                                        shippingCost={shippingCost}
+                                        taxAmount={taxAmount}
+                                        setDiscount={setDiscount}
+                                        discount={discount}
                                         openClearCartModal={openClearCartModal}
                                         openDeleteModal={openDeleteModal}
                                     />
-                                    <PayPalButton total={state.totalAmount} />
+                                    <PayPalButton
+                                        discount={discount}
+                                        shippingCost={shippingCost}
+                                        taxAmount={taxAmount}
+                                        setOpenModalPurchaseCompleted={setOpenModalPurchaseCompleted}
+                                        payPalButtonDisable={payPalButtonDisable}
+                                    />
                                 </div>
                             </div>
                         )}

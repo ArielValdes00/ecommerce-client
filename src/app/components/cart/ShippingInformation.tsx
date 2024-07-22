@@ -22,7 +22,12 @@ interface Errors {
     postalCode?: string;
     phoneNumber?: string;
 }
-const ShippingInformation = () => {
+
+interface ShippingInformationProps {
+    setPayPalButtonDisable: React.Dispatch<boolean>;
+}
+
+const ShippingInformation: React.FC<ShippingInformationProps> = ({ setPayPalButtonDisable }) => {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -38,34 +43,42 @@ const ShippingInformation = () => {
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-
+        
+        let newErrors: any = { ...errors };
         switch (name) {
             case 'firstName':
-                setErrors({ ...errors, [name]: validateFirstName(value) });
+                newErrors[name] = validateFirstName(value);
                 break;
             case 'lastName':
-                setErrors({ ...errors, [name]: validateLastName(value) });
+                newErrors[name] = validateLastName(value);
                 break;
             case 'email':
-                setErrors({ ...errors, [name]: validateEmail(value) });
+                newErrors[name] = validateEmail(value);
                 break;
             case 'address':
-                setErrors({ ...errors, [name]: validateAddress(value) });
+                newErrors[name] = validateAddress(value);
                 break;
             case 'city':
-                setErrors({ ...errors, [name]: validateCity(value) });
+                newErrors[name] = validateCity(value);
                 break;
-                case 'postalCode':
-                setErrors({ ...errors, [name]: validatePostalCode(value) });
+            case 'postalCode':
+                newErrors[name] = validatePostalCode(value);
                 break;
-                case 'phoneNumber':
-                setErrors({ ...errors, [name]: validatePhoneNumber(value) });
+            case 'phoneNumber':
+                newErrors[name] = validatePhoneNumber(value);
                 break;
             default:
                 break;
         }
+        setErrors(newErrors);
+    
+        const hasErrors = Object.values(newErrors).some(error => error !== '');
+        const isComplete = Object.values(formData).every(field => field.trim() !== '');
+    
+        setPayPalButtonDisable(hasErrors || !isComplete);
     };
-
+    
+    
     return (
         <div className='flex flex-col gap-4 py-4 lg:pe-10'>
             <div className='flex items-center gap-4'>

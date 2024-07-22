@@ -8,14 +8,16 @@ import React, { useState } from 'react'
 interface OrderInformationProps{
     openDeleteModal: (product: any) => void;
     openClearCartModal: (product: any) => void;
+    setDiscount: React.Dispatch<number>;
+    shippingCost: number;
+    taxAmount: number;
+    discount: number
 }
-const OrderInformation: React.FC<OrderInformationProps> = ({ openClearCartModal, openDeleteModal }) => {
-    const { state, dispatch } = useCart();
+const OrderInformation: React.FC<OrderInformationProps> = ({ openClearCartModal, openDeleteModal, setDiscount, shippingCost, taxAmount, discount }) => {
+    const { state } = useCart();
 
     const [couponCode, setCouponCode] = useState('');
-    const [shippingCost, setShippingCost] = useState(10.00);
-    const [taxAmount, setTaxAmount] = useState(state.totalAmount * 0.1);
-    const [discount, setDiscount] = useState(0.00);
+    
 
     const applyCoupon = () => {
         if (couponCode === 'SAVE10') {
@@ -23,7 +25,7 @@ const OrderInformation: React.FC<OrderInformationProps> = ({ openClearCartModal,
         }
     };
     return (
-        <div>
+        <div className='mb-6'>
             <div className='flex justify-between items-center py-4 border-b'>
                 <p className='text-start text-xl font-semibold text-gray-500 mb-1'>Your Order</p>
                 <p onClick={openClearCartModal} className='text-red-600 hover:underline text-sm cursor-pointer'>

@@ -15,6 +15,7 @@ export const CustomRadio: React.FC<CustomRadioProps> = ({ children, value, descr
             value={value}
             description={description}
             isDisabled={isDisabled}
+            checked={true}
             className={cn(
                 "group flex items-center bg-gray-100 mx-[.5px] hover:opacity-70 active:opacity-50 justify-between flex-row-reverse tap-highlight-transparent",
                 "w-full max-w-[31%] data-[selected=true]:border-2 cursor-pointer rounded-lg gap-4 p-4",
