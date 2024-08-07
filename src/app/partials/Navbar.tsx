@@ -52,7 +52,7 @@ export default function Header() {
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" className="text-lg" href="/contacts">
+                    <Link color="foreground" className="text-lg" href="/contact">
                         Contacts
                     </Link>
                 </NavbarItem>

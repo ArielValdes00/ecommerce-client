@@ -25,6 +25,18 @@ const CartPage = () => {
     });
     const router = useRouter();
     const modalDeleteProduct = useDisclosure();
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setIsMobile(window.innerWidth <= 550); 
+        };
+
+        window.addEventListener('resize', updateLayout);
+        updateLayout();
+
+        return () => window.removeEventListener('resize', updateLayout);
+    }, []);
 
     const shippingCost = 10.00;
     const taxAmount = state.totalAmount * 0.1
@@ -57,7 +69,7 @@ const CartPage = () => {
         });
         modalDeleteProduct.onOpen();
     };
-
+console.log(isMobile)
     const openClearCartModal = () => {
         setModalContent({
             header: 'Clear Cart',
@@ -71,8 +83,8 @@ const CartPage = () => {
         <MaxWidth>
             <div className={`${loading ? 'h-[600px] grid place-center mt-20' : 'h-full'}`}>
                 <ModalPurchaseCompleted
-                onOpenChange={setOpenModalPurchaseCompleted}
-                isOpen={openModalPurchaseCompleted}
+                    onOpenChange={setOpenModalPurchaseCompleted}
+                    isOpen={openModalPurchaseCompleted}
                 />
                 <ModalDeleteProduct
                     handleRemoveFromCart={modalContent.action}
@@ -102,9 +114,9 @@ const CartPage = () => {
                             <div className='grid lg:grid-cols-6 mt-6'>
                                 <div className='col-span-4'>
                                     <p className='text-start py-4 text-xl font-semibold text-gray-500'>Shipping Information</p>
-                                    <ShippingInformation setPayPalButtonDisable={setPayPalButtonDisable}/>
+                                    <ShippingInformation setPayPalButtonDisable={setPayPalButtonDisable} />
                                     <p className='text-start py-4 text-xl font-semibold text-gray-500'>Payment Method</p>
-                                    <RadioGroup defaultValue={"PayPal"} label="" orientation='horizontal' className='py-4' >
+                                    <RadioGroup defaultValue={"PayPal"} label="" orientation={isMobile ? 'vertical' : 'horizontal'} className={`${isMobile && 'flex flex-col gap-3 w-full'} py-4 w-full`} >
                                         <CustomRadio
                                             isDisabled={false}
                                             description="Pay with PayPal"

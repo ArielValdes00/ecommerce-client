@@ -32,7 +32,7 @@ const OrderInformation: React.FC<OrderInformationProps> = ({ openClearCartModal,
                     Clear Cart
                 </p>
             </div>
-            <div className='lg:pe-5 overflow-y-auto lg:max-h-[800px]'>
+            <div className='lg:pe-5 lg:overflow-y-auto lg:max-h-[800px]'>
                 {state.items.map((product: any) => (
                     <div key={product.id} className='flex flex-col border-b gap-4 items-center justify-between py-4'>
                         <div className='grid grid-cols-7 gap-3'>
